@@ -24,55 +24,24 @@ import com.example.myfupo.base.Item;
 
 import java.util.List;
 
-public class LayoutHelperAdapter extends DelegateAdapter.Adapter {
-    private LinearLayoutHelper linearLayoutHelper;
-    private List<Item.DataBean.ChannelBean> bean;
-    private Context context;
-    private static final String TAG = "LayoutHelperAdapter";
-    public LayoutHelperAdapter(LinearLayoutHelper linearLayoutHelper, List<Item.DataBean.ChannelBean> bean, Context context) {
-        this.linearLayoutHelper = linearLayoutHelper;
-        this.bean = bean;
-        this.context = context;
+public class LayoutHelperAdapter extends BaseAdapter {
+
+    public LayoutHelperAdapter(List mData, Context context) {
+        super(mData, context);
     }
 
     @Override
-    public LayoutHelper onCreateLayoutHelper() {
-        return linearLayoutHelper;
-    }
-
-
-    @NonNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_item, parent, false);
-        Log.d(TAG, "onBindViewHolder: "+"244444444444444444444444");
-        return new MyViewHolder(view);
-
-    }
-
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: "+"231133333333333333333");
-        MyViewHolder myViewHolder= (MyViewHolder) holder;
-        RequestOptions placeholder = new RequestOptions()
-                .placeholder(R.mipmap.ic_launcher);
-        Glide.with(context).load(bean.get(position).getIcon_url()).apply(placeholder).into(myViewHolder.imageView);
-        myViewHolder.textView.setText(bean.get(position).getName());
+    protected int getLatyou() {
+        return R.layout.layout_item;
     }
 
     @Override
-    public int getItemCount() {
-        return 5;
-    }
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView textView;
+    protected void bind(Object date, VH vh) {
+        Item.DataBean.ChannelBean channelBean= (Item.DataBean.ChannelBean) date;
+        ImageView iv_image = (ImageView) vh.getViewByid(R.id.iv_image);
+        TextView tv_title = (TextView) vh.getViewByid(R.id.tv_title);
+        Glide.with(vh.itemView).load(channelBean.getIcon_url()).into(iv_image);
+        tv_title.setText(channelBean.getName());
 
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textView = itemView.findViewById(R.id.tv_title);
-            imageView=itemView.findViewById(R.id.iv_image);
-        }
     }
 }
